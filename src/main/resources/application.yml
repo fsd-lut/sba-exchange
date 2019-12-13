@@ -1,0 +1,56 @@
+spring:
+  profiles:
+    active: local
+---
+spring:
+  profiles: local
+  application:
+    name: exchange-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://118.31.126.255:3306/fsdsba?useSSL=true&useUnicode=true&characterEncoding=utf-8
+    username: daniel
+    password: pass4you
+#mybatis configuration
+mybatis:
+  type-aliases-package: com.fsd.stock.exchange.entity
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+logging:
+  level:
+    com.sector.mapper: debug
+server:
+  port: 9006
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8001/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    
+# 服务管理配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"        #暴漏的接口，"*"表示所有web监控接口
+#        exclude:            #不暴漏的接口
+      base-path: /actuator  #监控根路径
+    enabled-by-default: true
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+swagger.enabled: true
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 20000
+        read-timeout: 20000 
